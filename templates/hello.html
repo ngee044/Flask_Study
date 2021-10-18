@@ -1,10 +1,21 @@
 <!DOCTYPE html>
+{% extends 'layout/base.html' %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% block head %}
     <title>hello</title>
+    {% endblock %}
 </head>
 <body>
+    {% block body %}
+        {% if name %}
+        <h1>Hello, {{name}}!</h1>
+        {% else %}
+        <h1>Hello, World!</h1>
+        {% endif %}
+        {% include 'hello2.html' %}
     <img src="/static/image/skirt.png">
+    {% endblock %}
 </body>
 </html>
