@@ -1,17 +1,25 @@
-from flask import Flask, redirect, url_for, abort
+from flask import Flask
+from flask.views import  MethodView
 
 app = Flask(__name__)
 
-@app.errorhandler(403)
-def permission_denied(error):
-    return '403', 403
+class UserView(MethodView):
+    def get(self, user_id):
+        if user_id is None:
+            return 'all'
+        else:
+            return 'one'
 
-@app.route('/')
-def index():
-    return redirect(url_for('user_list'))
+    def post(self):
+        return 'post'
 
-@app.route('/users')
-def user_list():
-    abort(403)
+    def put(self, user_id):
+        return 'put'
 
+    def delete(self, user_id):
+        return 'delete'
 
+user_view = UserView.as_view('users')
+app.add_url_rule('/user', defaults={'user_id':None}, view_func=user_view, methods=['GET'])
+app.add_url_rule('/user', view_func=user_view, methods=['POST'])
+app.add_url_rule('/users/<int:user_id>', view_funv=user_view, methods=['GET', 'PUT', 'DELETE'])
