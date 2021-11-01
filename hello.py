@@ -1,25 +1,19 @@
 from flask import Flask
-from flask.views import  MethodView
+from v1 import app as v1_app
+from v2 import app as v2_app
 
 app = Flask(__name__)
+app.register_blueprint(v1_app)
+app.register_blueprint(v2_app)
 
-class UserView(MethodView):
-    def get(self, user_id):
-        if user_id is None:
-            return 'all'
-        else:
-            return 'one'
 
-    def post(self):
-        return 'post'
 
-    def put(self, user_id):
-        return 'put'
 
-    def delete(self, user_id):
-        return 'delete'
+@app.route('/v1/users')
+def v1_users():
+    return 'v1'
 
-user_view = UserView.as_view('users')
-app.add_url_rule('/user', defaults={'user_id':None}, view_func=user_view, methods=['GET'])
-app.add_url_rule('/user', view_func=user_view, methods=['POST'])
-app.add_url_rule('/users/<int:user_id>', view_funv=user_view, methods=['GET', 'PUT', 'DELETE'])
+@app.route('/v2/users')
+def v2_users():
+    return 'v2'
+
